@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "epic-spinners": "^1.1.0",
+    "vue": "^2.6.11",
+    "vue2-circle-progress": "^1.2.3",
+    "vuesax": "^3.11.17"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
