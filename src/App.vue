@@ -10,11 +10,11 @@
 
     <div class="playGround">
       
-      <FingerTouchObject v-if="this.numberOfPlayers>=2" color='#000000' playerNumber='1' class="one"/>
-      <FingerTouchObject v-if="this.numberOfPlayers>=2" color='#24d957' playerNumber='2' class="two"/>
-      <FingerTouchObject v-if="this.numberOfPlayers>=3" color='#9a138e' playerNumber='3' class="three"/>
-      <FingerTouchObject v-if="this.numberOfPlayers>=4" color='#b07b01' playerNumber='4' class="four"/>
-      <FingerTouchObject v-if="this.numberOfPlayers>=5" color='#2b5985' playerNumber='5' class="five"/>
+      <FingerTouchObject  @mouseup.native="onReleased" @mousedown.native="onClicked" v-if="this.numberOfPlayers>=2" color='#000000' playerNumber='1' class="one"/>
+      <FingerTouchObject  @mouseup.native="onReleased" @mousedown.native="onClicked" v-if="this.numberOfPlayers>=2" color='#24d957' playerNumber='2' class="two"/>
+      <FingerTouchObject  @mouseup.native="onReleased" @mousedown.native="onClicked" v-if="this.numberOfPlayers>=3" color='#9a138e' playerNumber='3' class="three"/>
+      <FingerTouchObject  @mouseup.native="onReleased" @mousedown.native="onClicked" v-if="this.numberOfPlayers>=4" color='#b07b01' playerNumber='4' class="four"/>
+      <FingerTouchObject  @mouseup.native="onReleased" @mousedown.native="onClicked" v-if="this.numberOfPlayers>=5" color='#2b5985' playerNumber='5' class="five"/>
 
     </div>
   </div>
@@ -28,7 +28,8 @@ export default {
   name: 'App',
   data: function(){
     return{
-      numberOfPlayers: 2
+      numberOfPlayers: 2,
+      currentPressed:0
     };
   },
   components: {
@@ -36,12 +37,64 @@ export default {
     FingerTouchObject
   },
   methods:{
-    
+    onClicked:function(event){// eslint-disable-line no-unused-vars
+      console.log("from app");
+      console.log("MAX IS "+this.numberOfPlayers);
+
+      console.log("before pressing is "+this.currentPressed);
+
+      this.currentPressed+=1;
+      if(this.currentPressed >= this.numberOfPlayers){
+        this.currentPressed = this.numberOfPlayers;
+
+      }
+        this.startRandomize();
+
+      console.log("current pressing is "+this.currentPressed);
+    },
+    onReleased:function(event){// eslint-disable-line no-unused-vars
+      console.log("from app released");
+
+      console.log("MAX IS "+this.numberOfPlayers);
+
+      console.log("before pressing is "+this.currentPressed);
+
+      this.currentPressed-=1;
+
+      if(this.currentPressed <= 0)
+        this.currentPressed = 0;
+
+      console.log("current pressing is "+this.currentPressed);
+    },
+    startRandomize:function(){
+      let components = this.$options.components;
+      console.log(components);
+    }
   }
 }
 </script>
 
 <style>
+* {
+  -webkit-touch-callout: none;
+  
+  /* iOS Safari */
+  -webkit-user-select: none;
+  
+  /* Safari */
+  -khtml-user-select: none;
+  
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  
+  /* Firefox */
+  -ms-user-select: none;
+  
+  /* Internet Explorer/Edge */
+  user-select: none;
+  
+  /* Non-prefixed version, currently supported by Chrome and Opera */
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -13,6 +13,7 @@
   :size="100"
   :color="color"
   @mousedown.native="onClicked"
+  @touchstart.native="onClicked"
 />
   
     <fulfilling-bouncing-circle-spinner v-if="this.isClicked===true && this.isMaster ===false"
@@ -20,6 +21,7 @@
   :size="100"
   color="#DAA520"
   @mouseup.native="onReleased"
+  @touchend.native="onReleased"
 /> 
 
 
