@@ -1,6 +1,6 @@
 <template>
 <div class="touchButton">
-    <div class="playerNumber" v-if="this.playerNumber!=0" >{{playerNumber}}</div>
+    <div class="playerNumber"><div v-if="this.playerNumber!=0">{{playerNumber}}</div></div>
     <!-- <orbit-spinner v-if="this.isClicked===false"
   :animation-duration="1200"
   :size="100"
@@ -12,23 +12,18 @@
   :animation-duration="3000"
   :size="100"
   :color="color"
-  @mousedown.native="onClicked"
-  @touchstart.native="onClicked"
-  
 />
   
     <fulfilling-bouncing-circle-spinner v-if="this.isClicked===true && this.isMaster ===false"
   :animation-duration="4000"
   :size="100"
   color="#DAA520"
-  @mouseup.native="onReleased"
-  @touchend.native="onReleased"
 /> 
 
 
 <trinity-rings-spinner  v-if="this.isMaster ===true"
   :animation-duration="1500"
-  :size="150"
+  :size="100"
   color="#ff1d5e"
 />
 </div>

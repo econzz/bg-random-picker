@@ -17,7 +17,8 @@
       <div v-if="this.currentPressed==this.numberOfPlayers">ALL PLAYER CONFIRMED! randoming in {{this.tick}}s</div>
 
       <FingerTouchObject ref="touch1" 
-      @mouseup.native="onReleased" 
+      @mouseup.native="onReleased(1)" 
+      @touchend.native="onReleased(1)"
       @mousedown.native="onClicked(1)" 
       @touchstart.native="onClicked(1)"
       v-if="this.numberOfPlayers>=2" 
@@ -27,8 +28,8 @@
       
       
       <FingerTouchObject ref="touch2" 
-      @mouseup.native="onReleased" 
-      @touchend.native="onReleased"
+      @mouseup.native="onReleased(2)" 
+      @touchend.native="onReleased(2)"
       @mousedown.native="onClicked(2)" 
       @touchstart.native="onClicked(2)"
       v-if="this.numberOfPlayers>=2" 
@@ -37,8 +38,8 @@
       class="two"/>
 
       <FingerTouchObject ref="touch3" 
-      @mouseup.native="onReleased" 
-      @touchend.native="onReleased"
+      @mouseup.native="onReleased(3)" 
+      @touchend.native="onReleased(3)"
       @mousedown.native="onClicked(3)" 
       @touchstart.native="onClicked(3)"
       v-if="this.numberOfPlayers>=3" 
@@ -47,8 +48,8 @@
       class="three"/>
 
       <FingerTouchObject ref="touch4" 
-      @mouseup.native="onReleased" 
-      @touchend.native="onReleased"
+      @mouseup.native="onReleased(4)" 
+      @touchend.native="onReleased(4)"
       @mousedown.native="onClicked(4)" 
       @touchstart.native="onClicked(4)"
       v-if="this.numberOfPlayers>=4" 
@@ -57,8 +58,8 @@
       class="four"/>
 
       <FingerTouchObject ref="touch5"
-      @mouseup.native="onReleased"
-      @touchend.native="onReleased"
+      @mouseup.native="onReleased(5)"
+      @touchend.native="onReleased(5)"
       @mousedown.native="onClicked(5)" 
       @touchstart.native="onClicked(5)"
       v-if="this.numberOfPlayers>=5"
@@ -112,7 +113,7 @@ export default {
           buttonId = event.key;
           if(!self.$refs["touch"+buttonId] || self.$refs["touch"+buttonId].isClicked)
             return;
-          self.$refs["touch"+buttonId].onClicked();
+
           self.onClicked(buttonId);
           break;
 
@@ -120,35 +121,35 @@ export default {
           buttonId = 1;
           if(!self.$refs["touch"+buttonId] ||self.$refs["touch"+buttonId].isClicked === false)
             return;
-          self.$refs["touch"+buttonId].onReleased();
+
           self.onReleased(buttonId);
           break;
         case "7":
           buttonId = 2;
           if(!self.$refs["touch"+buttonId] ||self.$refs["touch"+buttonId].isClicked === false)
             return;
-          self.$refs["touch"+buttonId].onReleased();
+
           self.onReleased(buttonId);
           break;
         case "8":
           buttonId = 3;
           if(!self.$refs["touch"+buttonId] ||self.$refs["touch"+buttonId].isClicked === false)
             return;
-          self.$refs["touch"+buttonId].onReleased();
+
           self.onReleased(buttonId);
           break;
         case "9":
           buttonId = 4;
           if(!self.$refs["touch"+buttonId] ||self.$refs["touch"+buttonId].isClicked === false)
             return;
-          self.$refs["touch"+buttonId].onReleased();
+
           self.onReleased(buttonId);
           break;
         case "0":
           buttonId = 5;
           if(!self.$refs["touch"+buttonId] ||self.$refs["touch"+buttonId].isClicked === false)
             return;
-          self.$refs["touch"+buttonId].onReleased();
+
           self.onReleased(buttonId);
           break;
       }
@@ -173,31 +174,42 @@ export default {
       
     },
     onClicked:function(number){// eslint-disable-line no-unused-vars
-    
-      console.log(this.$refs["touch"+number].isClicked);
+
+      if(!this.$refs["touch"+number] || this.$refs["touch"+number].isClicked)
+        return;
+        
+      this.$refs["touch"+number].onClicked();
+
       this.currentPressed+=1;
       if(this.currentPressed >= this.numberOfPlayers){
         this.currentPressed = this.numberOfPlayers;
 
       }
-        this.waitingToRandomize();
+        this.checkForRandomize();
 
 
     },
-    onReleased:function(event){// eslint-disable-line no-unused-vars
-    
+    onReleased:function(number){// eslint-disable-line no-unused-vars
+
+      if(!this.$refs["touch"+number] || this.$refs["touch"+number].isClicked === false)
+        return;
+        
+
+      this.$refs["touch"+number].onReleased();
 
       this.currentPressed-=1;
-
+      
       if(this.currentPressed <= 0)
         this.currentPressed = 0;
 
+      this.checkForRandomize();
     },
-    waitingToRandomize:function(){
+    checkForRandomize:function(){
       if(this.currentPressed === this.numberOfPlayers){
         this.interval = setInterval(this.incrementTime, 1000);
       }
       else{
+        this.tick = 3;
         clearInterval(this.interval);
         console.log('timer stops');
       }
