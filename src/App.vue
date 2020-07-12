@@ -82,7 +82,8 @@ export default {
       numberOfPlayers: 2,
       currentPressed:0,
       tick:3,
-      interval: null
+      interval: null,
+      isDone:false,
     };
   },
   components: {
@@ -165,6 +166,7 @@ export default {
       this.numberOfPlayers=2;
       this.currentPressed=0;
       this.tick = 3;
+      this.isDone = false;
       for(let i = 1;i<=5;i++){
         if(this.$refs["touch"+i])
           this.$refs["touch"+i].reset();
@@ -174,6 +176,9 @@ export default {
       
     },
     onClicked:function(number){// eslint-disable-line no-unused-vars
+
+      if(this.isDone)
+        return;
 
       if(!this.$refs["touch"+number] || this.$refs["touch"+number].isClicked)
         return;
@@ -190,6 +195,9 @@ export default {
 
     },
     onReleased:function(number){// eslint-disable-line no-unused-vars
+
+      if(this.isDone)
+        return;
 
       if(!this.$refs["touch"+number] || this.$refs["touch"+number].isClicked === false)
         return;
@@ -235,6 +243,8 @@ export default {
           for(let j=0;j<randomizedResult.length;j++){
              this.$refs["touch"+(j+1)].setPlayerNumber(randomizedResult[j]);
           }
+
+        this.isDone = true;
       }
     },
     shuffleArray:function(array) {
