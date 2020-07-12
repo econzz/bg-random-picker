@@ -1,6 +1,6 @@
 <template>
 <div class="touchButton">
-    <div class="playerNumber">{{playerNumber}}</div>
+    <div class="playerNumber" v-if="this.playerNumber!=0" >{{playerNumber}}</div>
     <!-- <orbit-spinner v-if="this.isClicked===false"
   :animation-duration="1200"
   :size="100"
@@ -14,6 +14,7 @@
   :color="color"
   @mousedown.native="onClicked"
   @touchstart.native="onClicked"
+  
 />
   
     <fulfilling-bouncing-circle-spinner v-if="this.isClicked===true && this.isMaster ===false"
@@ -27,7 +28,7 @@
 
 <trinity-rings-spinner  v-if="this.isMaster ===true"
   :animation-duration="1500"
-  :size="100"
+  :size="150"
   color="#ff1d5e"
 />
 </div>
@@ -50,11 +51,13 @@ export default {
     return{
       isClicked: false,
       isMaster:false,
+      playerNumber:0,
     };
   },
   props: {
-    playerNumber:String,
+    
     color:String,
+    buttonId:String
   },
   components: {
     // OrbitSpinner ,// eslint-disable-line no-unused-vars
@@ -63,19 +66,36 @@ export default {
     TrinityRingsSpinner
   },
   methods:{
+    
     onClicked:function(event){// eslint-disable-line no-unused-vars
-        console.log("guiruguruclicks");
-        console.log(this.playerNumber);
         this.isClicked = true;
     },
     onReleased:function(event){// eslint-disable-line no-unused-vars
-        console.log("guruguruclick released");
-        console.log(this.playerNumber);
         this.isClicked = false;
     },
-    created: function(){
-        console.log("CREATED!");
-    }
+    setPlayerNumber:function(number){
+      this.playerNumber = number;
+      if(this.playerNumber === 1){
+        this.markMaster();
+      }
+    },
+    getPlayerNumber:function(){
+      return this.playerNumber;
+    },
+    markMaster:function(){
+      this.isMaster=true;
+    },
+    reset:function(){
+      this.isMaster = false;
+      this.isClicked = false;
+      this.playerNumber = 0;
+    },
+  },
+  created: function(){
+    
+  },
+  mounted: function() {
+
   }
 }
 </script>

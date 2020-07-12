@@ -18,7 +18,7 @@ export default {
     nums:String
   },
   methods:{
-  }
+  },
 }
 </script>
 
