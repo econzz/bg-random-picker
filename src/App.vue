@@ -10,13 +10,60 @@
     </div>
 
     <div class="playGround">
+      <button class="reset" 
+      @mousedown="reset()" 
+      @touchstart="reset()">RESET</button>
       Player Confirmed: {{currentPressed}}
+      <div v-if="this.currentPressed==this.numberOfPlayers">ALL PLAYER CONFIRMED! randoming in {{this.tick}}s</div>
+
+      <FingerTouchObject ref="touch1" 
+      @mouseup.native="onReleased" 
+      @mousedown.native="onClicked(1)" 
+      @touchstart.native="onClicked(1)"
+      v-if="this.numberOfPlayers>=2" 
+      color='#000000' 
+      buttonId='1' 
+      class="one"/>
       
-      <FingerTouchObject ref="touch1" @mouseup.native="onReleased" @mousedown.native="onClicked(1)" v-if="this.numberOfPlayers>=2" color='#000000' buttonId='1' class="one"/>
-      <FingerTouchObject ref="touch2" @mouseup.native="onReleased" @mousedown.native="onClicked(2)" v-if="this.numberOfPlayers>=2" color='#24d957' buttonId='2' class="two"/>
-      <FingerTouchObject ref="touch3" @mouseup.native="onReleased" @mousedown.native="onClicked(3)" v-if="this.numberOfPlayers>=3" color='#9a138e' buttonId='3' class="three"/>
-      <FingerTouchObject ref="touch4" @mouseup.native="onReleased" @mousedown.native="onClicked(4)" v-if="this.numberOfPlayers>=4" color='#b07b01' buttonId='4' class="four"/>
-      <FingerTouchObject ref="touch5" @mouseup.native="onReleased" @mousedown.native="onClicked(5)" v-if="this.numberOfPlayers>=5" color='#2b5985' buttonId='5' class="five"/>
+      
+      <FingerTouchObject ref="touch2" 
+      @mouseup.native="onReleased" 
+      @touchend.native="onReleased"
+      @mousedown.native="onClicked(2)" 
+      @touchstart.native="onClicked(2)"
+      v-if="this.numberOfPlayers>=2" 
+      color='#24d957' 
+      buttonId='2' 
+      class="two"/>
+
+      <FingerTouchObject ref="touch3" 
+      @mouseup.native="onReleased" 
+      @touchend.native="onReleased"
+      @mousedown.native="onClicked(3)" 
+      @touchstart.native="onClicked(3)"
+      v-if="this.numberOfPlayers>=3" 
+      color='#9a138e' 
+      buttonId='3' 
+      class="three"/>
+
+      <FingerTouchObject ref="touch4" 
+      @mouseup.native="onReleased" 
+      @touchend.native="onReleased"
+      @mousedown.native="onClicked(4)" 
+      @touchstart.native="onClicked(4)"
+      v-if="this.numberOfPlayers>=4" 
+      color='#b07b01' 
+      buttonId='4' 
+      class="four"/>
+
+      <FingerTouchObject ref="touch5"
+      @mouseup.native="onReleased"
+      @touchend.native="onReleased"
+      @mousedown.native="onClicked(5)" 
+      @touchstart.native="onClicked(5)"
+      v-if="this.numberOfPlayers>=5"
+      color='#2b5985' buttonId='5' 
+      class="five"/>
 
     </div>
   </div>
@@ -32,7 +79,9 @@ export default {
   data: function(){
     return{
       numberOfPlayers: 2,
-      currentPressed:0
+      currentPressed:0,
+      tick:3,
+      interval: null
     };
   },
   components: {
@@ -111,9 +160,10 @@ export default {
   },
   methods:{
     reset:function(){
+
       this.numberOfPlayers=2;
       this.currentPressed=0;
-
+      this.tick = 3;
       for(let i = 1;i<=5;i++){
         if(this.$refs["touch"+i])
           this.$refs["touch"+i].reset();
@@ -130,7 +180,7 @@ export default {
         this.currentPressed = this.numberOfPlayers;
 
       }
-        this.startRandomize();
+        this.waitingToRandomize();
 
 
     },
@@ -142,6 +192,24 @@ export default {
       if(this.currentPressed <= 0)
         this.currentPressed = 0;
 
+    },
+    waitingToRandomize:function(){
+      if(this.currentPressed === this.numberOfPlayers){
+        this.interval = setInterval(this.incrementTime, 1000);
+      }
+      else{
+        clearInterval(this.interval);
+        console.log('timer stops');
+      }
+    },
+    incrementTime() {
+      this.tick -=1; 
+      if(this.tick <= 0){
+        this.tick = 0;
+        clearInterval(this.interval);
+        console.log('start randoming!');
+        this.startRandomize();
+      }
     },
     startRandomize:function(){
       let result=[];
@@ -155,11 +223,6 @@ export default {
           for(let j=0;j<randomizedResult.length;j++){
              this.$refs["touch"+(j+1)].setPlayerNumber(randomizedResult[j]);
           }
-
-          var self = this;
-        setTimeout(function(){
-          self.reset();
-        },2000);
       }
     },
     shuffleArray:function(array) {
