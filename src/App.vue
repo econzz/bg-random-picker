@@ -17,10 +17,14 @@
       <div v-if="this.currentPressed==this.numberOfPlayers">ALL PLAYER CONFIRMED! randoming in {{this.tick}}s</div>
 
       <FingerTouchObject ref="touch1" 
+      
       @mouseup.native="onReleased(1)" 
       @touchend.native="onReleased(1)"
+      @touchcancel.native="onReleased(1)"
       @mousedown.native="onClicked(1)" 
       @touchstart.native="onClicked(1)"
+      v-long-press="300"
+      @long-press-stop="onReleased(1)"
       v-if="this.numberOfPlayers>=2" 
       color='#000000' 
       buttonId='1' 
@@ -30,8 +34,11 @@
       <FingerTouchObject ref="touch2" 
       @mouseup.native="onReleased(2)" 
       @touchend.native="onReleased(2)"
+      @touchcancel.native="onReleased(2)"
       @mousedown.native="onClicked(2)" 
       @touchstart.native="onClicked(2)"
+      v-long-press="300"
+      @long-press-stop="onReleased(2)"
       v-if="this.numberOfPlayers>=2" 
       color='#24d957' 
       buttonId='2' 
@@ -40,8 +47,11 @@
       <FingerTouchObject ref="touch3" 
       @mouseup.native="onReleased(3)" 
       @touchend.native="onReleased(3)"
+      @touchcancel.native="onReleased(3)"
       @mousedown.native="onClicked(3)" 
       @touchstart.native="onClicked(3)"
+      v-long-press="300"
+      @long-press-stop="onReleased(3)"
       v-if="this.numberOfPlayers>=3" 
       color='#9a138e' 
       buttonId='3' 
@@ -50,8 +60,11 @@
       <FingerTouchObject ref="touch4" 
       @mouseup.native="onReleased(4)" 
       @touchend.native="onReleased(4)"
+      @touchcancel.native="onReleased(4)"
       @mousedown.native="onClicked(4)" 
       @touchstart.native="onClicked(4)"
+      v-long-press="300"
+      @long-press-stop="onReleased(4)"
       v-if="this.numberOfPlayers>=4" 
       color='#b07b01' 
       buttonId='4' 
@@ -60,8 +73,11 @@
       <FingerTouchObject ref="touch5"
       @mouseup.native="onReleased(5)"
       @touchend.native="onReleased(5)"
+      @touchcancel.native="onReleased(5)"
       @mousedown.native="onClicked(5)" 
       @touchstart.native="onClicked(5)"
+      v-long-press="300"
+      @long-press-stop="onReleased(5)"
       v-if="this.numberOfPlayers>=5"
       color='#2b5985' buttonId='5' 
       class="five"/>
@@ -74,17 +90,17 @@
 <script>
 import ButtonsObject from './components/ButtonsObject.vue'
 import FingerTouchObject from './components/FingerTouchObject.vue'
+//import VConsole from "vconsole"
+import LongPress from 'vue-directive-long-press'
 
+//var vConsole = new VConsole();// eslint-disable-line no-unused-vars
 export default {
   name: 'App',
   data: function(){
-    return{
-      numberOfPlayers: 2,
-      currentPressed:0,
-      tick:3,
-      interval: null,
-      isDone:false,
-    };
+    return this.initialData();
+  },
+  directives: {
+    'long-press': LongPress
   },
   components: {
     ButtonsObject,
@@ -161,12 +177,18 @@ export default {
     
   },
   methods:{
+    initialData:function(){
+      return {
+        numberOfPlayers: 2,
+        currentPressed:0,
+        tick:3,
+        interval: null,
+        isDone:false,
+      };
+    },
     reset:function(){
 
-      this.numberOfPlayers=2;
-      this.currentPressed=0;
-      this.tick = 3;
-      this.isDone = false;
+      Object.assign(this.$data, this.initialData());
       for(let i = 1;i<=5;i++){
         if(this.$refs["touch"+i])
           this.$refs["touch"+i].reset();
@@ -175,8 +197,11 @@ export default {
       
       
     },
+    onLongPressend:function(){
+      console.log("longpressend");
+    },
     onClicked:function(number){// eslint-disable-line no-unused-vars
-
+      console.log("onclicked");
       if(this.isDone)
         return;
 
@@ -195,7 +220,7 @@ export default {
 
     },
     onReleased:function(number){// eslint-disable-line no-unused-vars
-
+      console.log("onReleased");
       if(this.isDone)
         return;
 
@@ -217,7 +242,7 @@ export default {
         this.interval = setInterval(this.incrementTime, 1000);
       }
       else{
-        this.tick = 3;
+        this.tick = this.initialData().tick;
         clearInterval(this.interval);
         console.log('timer stops');
       }
@@ -270,7 +295,8 @@ export default {
   
   /* Safari */
   -khtml-user-select: none;
-  
+  -webkit-overflow-scrolling: touch;
+
   /* Konqueror HTML */
   -moz-user-select: none;
   
@@ -279,7 +305,7 @@ export default {
   
   /* Internet Explorer/Edge */
   user-select: none;
-  
+  touch-action: none;
   /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 #app {

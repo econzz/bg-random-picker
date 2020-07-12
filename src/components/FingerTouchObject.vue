@@ -1,6 +1,6 @@
 <template>
 <div class="touchButton">
-    <div class="playerNumber"><div v-if="this.playerNumber!=0">{{playerNumber}}</div></div>
+    <div class="playerNumber"><div v-if="this.playerNumber==0">TOUCH ↓</div><div v-if="this.playerNumber!=0">{{playerNumber}}</div></div>
     <!-- <orbit-spinner v-if="this.isClicked===false"
   :animation-duration="1200"
   :size="100"
@@ -21,7 +21,7 @@
 /> 
 
 
-<trinity-rings-spinner  v-if="this.isMaster ===true"
+<fulfilling-bouncing-circle-spinner  v-if="this.isMaster ===true"
   :animation-duration="1500"
   :size="100"
   color="#ff1d5e"
@@ -33,13 +33,13 @@
 /*eslint no-unused-vars: "error"*/
 import Vue from 'vue'
 import { FulfillingBouncingCircleSpinner  } from 'epic-spinners'
-import { TrinityRingsSpinner } from 'epic-spinners'
+
 import { OrbitSpinner } from 'epic-spinners'// eslint-disable-line no-unused-vars
 import { SpringSpinner } from 'epic-spinners'
 Vue.use(OrbitSpinner );// eslint-disable-line no-unused-vars
 Vue.use(FulfillingBouncingCircleSpinner );
 Vue.use(SpringSpinner );
-Vue.use(TrinityRingsSpinner );
+
 export default {
   name: 'FingerTouchObject',
   data: function(){
@@ -57,8 +57,7 @@ export default {
   components: {
     // OrbitSpinner ,// eslint-disable-line no-unused-vars
     FulfillingBouncingCircleSpinner,
-    SpringSpinner,
-    TrinityRingsSpinner
+    SpringSpinner
   },
   methods:{
     
