@@ -1,5 +1,14 @@
 # bg-random-picker
 
+a private project i made to determine who goees first when playing board game.
+why i made this? 
+
+well,
+why not?
+
+details: (in Japanese)
+https://neruchanz.hatenablog.com/archive/2020/05/16
+
 ## Project setup
 ```
 npm install

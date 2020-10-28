@@ -115,6 +115,9 @@ export default {
     this.reset();//reset before doing anything
     let self = this; 
     
+    /**
+     * for test on PC
+     */
     window.addEventListener('keyup', function(event) {
       event.preventDefault();
       if(!event.key)
@@ -177,6 +180,9 @@ export default {
     
   },
   methods:{
+    /**
+     * initialize Data
+     */
     initialData:function(){
       return {
         numberOfPlayers: 2,
@@ -186,6 +192,10 @@ export default {
         isDone:false,
       };
     },
+
+    /**
+     * set the data to initial
+     */
     reset:function(){
 
       Object.assign(this.$data, this.initialData());
@@ -193,13 +203,15 @@ export default {
         if(this.$refs["touch"+i])
           this.$refs["touch"+i].reset();
       }
-
-      
-      
     },
+
     onLongPressend:function(){
       console.log("longpressend");
     },
+
+    /**
+     * on clicked
+     */
     onClicked:function(number){// eslint-disable-line no-unused-vars
       console.log("onclicked");
       if(this.isDone)
@@ -216,9 +228,11 @@ export default {
 
       }
         this.checkForRandomize();
-
-
     },
+
+    /**
+     * on released
+     */
     onReleased:function(number){// eslint-disable-line no-unused-vars
       console.log("onReleased");
       if(this.isDone)
@@ -237,6 +251,10 @@ export default {
 
       this.checkForRandomize();
     },
+
+    /**
+     * on clicked, check whether all player already pressed the button or not
+     */
     checkForRandomize:function(){
       if(this.currentPressed === this.numberOfPlayers){
         this.interval = setInterval(this.incrementTime, 1000);
@@ -247,6 +265,10 @@ export default {
         console.log('timer stops');
       }
     },
+
+  /**
+   * increment time when all player is ready. when timer ends, randomized who goes first
+   */
     incrementTime() {
       this.tick -=1; 
       if(this.tick <= 0){
@@ -256,6 +278,10 @@ export default {
         this.startRandomize();
       }
     },
+
+    /**
+     * randomize
+     */
     startRandomize:function(){
       let result=[];
       if(this.currentPressed === this.numberOfPlayers){
@@ -272,6 +298,10 @@ export default {
         this.isDone = true;
       }
     },
+
+    /**
+     * randomized using Durstenfeld shuffle algorithm
+     */
     shuffleArray:function(array) {
       /* Randomize array in-place using Durstenfeld shuffle algorithm */
        for (var i = array.length - 1; i > 0; i--) {
